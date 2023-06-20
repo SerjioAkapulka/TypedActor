@@ -1,6 +1,6 @@
 package msg;
 
-public class EmailRequest implements Request{
+public class EmailRequest implements EmailOrSMSRequest {
 
     String email;
 
