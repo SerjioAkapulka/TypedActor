@@ -1,6 +1,6 @@
 package msg;
 
-public class SMSRequest {
+public class SMSRequest implements Request{
 
 private String mobileNumber;
 
