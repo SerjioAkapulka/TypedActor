@@ -2,6 +2,7 @@ package actor;
 
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
+import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
 
 public class CookieFabric {
@@ -15,7 +16,6 @@ public class CookieFabric {
     }
 
     private static Behavior<Request> onRequest(Request request) {
-        // ... process request ...
         request.replyTo.tell(new Response("Here are the cookies for " + request.query));
         return Behaviors.same();
     }
@@ -37,5 +37,19 @@ public class CookieFabric {
         public Response(String result) {
             this.result = result;
         }
+    }
+
+    public void demo() {
+        ActorRef<CookieFabric.Request> cookieFabric = null;
+        ActorContext<Response> context = null;
+
+        // #request-response-send
+        cookieFabric.tell(new CookieFabric.Request("give me cookies", context.getSelf()));
+        // #request-response-send
+
+        // #ignore-reply
+        cookieFabric.tell(
+                new CookieFabric.Request("don't send cookies back", context.getSystem().ignoreRef()));
+        // #ignore-reply
     }
 }

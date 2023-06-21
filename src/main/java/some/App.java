@@ -1,14 +1,12 @@
 package some;
 
-import actor.CookieFabric;
-import actor.NotificationActor;
-import actor.Printer;
+import actor.*;
+import akka.actor.ActorPath;
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.ActorSystem;
-import akka.actor.typed.Behavior;
-import akka.actor.typed.javadsl.Behaviors;
-import msg.EmailRequest;
+import akka.actor.typed.javadsl.ActorContext;
 import msg.EmailOrSMSRequest;
+import msg.EmailRequest;
 import msg.SMSRequest;
 
 
@@ -26,10 +24,19 @@ public class App {
 
 
         final ActorRef<CookieFabric.Request> cookieFabric = ActorSystem.create(CookieFabric.create(), "cookie");
+        var cookieFabric34 = new CookieFabric();
+        cookieFabric34.demo();
         cookieFabric.tell(new CookieFabric.Request("give me cookies", context.getSelf()));
 
-    }
 
+
+        final ActorRef<Hal.Command> commandHalActorRef = ActorSystem.create(Hal.create(), "Hal");
+        final ActorRef<Dave.Command> commandDaveActorRef = ActorSystem.create(Dave.create(commandHalActorRef), "Dave");
+        commandDaveActorRef.tell(new Hal.OpenThePodBayDoorsPlease(new Hal.HalResponse("fg")), );
+
+
+
+    }
 
 
 }
